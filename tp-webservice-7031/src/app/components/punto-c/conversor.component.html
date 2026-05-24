@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white text-center py-3 rounded-top-4">
+          <h3 class="mb-0 fw-bold">Conversor De Divisas</h3>
+        </div>
+        
+        <div class="card-body p-4 bg-light">
+          
+          <div class="mb-4">
+            <label class="form-label fw-bold text-secondary">Cantidad</label>
+            <input 
+              type="number" 
+              class="form-control form-control-lg" 
+              [(ngModel)]="cantidad" 
+              placeholder="Ej. 100"
+              min="1">
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-secondary">De</label>
+              <select class="form-select form-select-lg" [(ngModel)]="monedaOrigen">
+                @for (moneda of listaMonedas; track moneda.codigo) {
+                  <option [value]="moneda.codigo">{{ moneda.codigo }} - {{ moneda.nombre }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-secondary">A</label>
+              <select class="form-select form-select-lg" [(ngModel)]="monedaDestino">
+                @for (moneda of listaMonedas; track moneda.codigo) {
+                  <option [value]="moneda.codigo">{{ moneda.codigo }} - {{ moneda.nombre }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <button 
+            class="btn btn-success btn-lg w-100 fw-bold shadow-sm mb-4" 
+            (click)="realizarConversion()" 
+            [disabled]="cargando || cantidad <= 0">
+            @if (cargando) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Calculando...
+            } @else {
+              Convertir
+            }
+          </button>
+
+          @if (resultado !== null) {
+            <div class="alert alert-success text-center border-success bg-success-subtle p-4 mt-3 rounded-3 shadow-sm">
+              <p class="text-muted mb-1 fs-5">{{ cantidad }} {{ monedaOrigen }} equivalen a:</p>
+              <h2 class="display-6 fw-bold text-success mb-0">
+                {{ resultado | number:'1.2-2' }} {{ monedaDestino }}
+              </h2>
+            </div>
+          }
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
