@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+          <h3 class="mb-0 fw-bold">Texto a Voz (OpenAI)</h3>
+        </div>
+        
+        <div class="card-body p-4 bg-light">
+          
+          <div class="mb-3">
+            <label class="form-label fw-bold text-secondary">Idioma</label>
+            <select class="form-select" [(ngModel)]="idiomaSeleccionado">
+              <option value="alloy">Voz 1 (Alloy - Neutral)</option>
+              <option value="echo">Voz 2 (Echo - Masculina)</option>
+              <option value="nova">Voz 3 (Nova - Femenina)</option>
+              <option value="onyx">Voz 4 (Onyx - Profunda)</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold text-secondary">¿Qué quieres que diga?</label>
+            <textarea 
+              class="form-control" 
+              rows="4" 
+              [(ngModel)]="textoIngresado" 
+              placeholder="Escribe tu texto aquí..."></textarea>
+          </div>
+
+          <button 
+            class="btn btn-primary btn-lg w-100 fw-bold shadow-sm mb-4" 
+            (click)="generarAudio()" 
+            [disabled]="cargando || textoIngresado.length === 0">
+            @if (cargando) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Sintetizando voz...
+            } @else {
+              Generar Audio
+            }
+          </button>
+
+          @if (audioGeneradoUrl) {
+            <div class="text-center mt-3 p-3 bg-white rounded-3 shadow-sm border">
+              <h5 class="text-success mb-3 fw-bold">¡Tu audio está listo!</h5>
+              
+              <audio controls class="w-100" [src]="audioGeneradoUrl">
+                Tu navegador no soporta el elemento de audio.
+              </audio>
+              
+            </div>
+          }
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
