@@ -3,13 +3,14 @@ import { Routes } from '@angular/router';
 // 1. Importamos los componentes que van a ser las "Páginas"
 import { Home } from './components/layout/home/home.component'; 
 import { PeliculasComponent } from './components/punto-a/peliculas.component';
+import { AutosComponent } from './components/punto-b/autos.component'; // Reemplaza por tu componente real
 // Importa aquí los demás (Conversor, TextToSpeech, etc.)
 
 export const routes: Routes = [
   // 2. Definimos qué ruta en la URL carga qué componente
   { path: 'home', component: Home },
   { path: 'app-peliculas', component: PeliculasComponent },
-  { path: 'punto2', component: Home }, // Reemplaza por tu componente real
+  { path: 'app-autos', component: AutosComponent }, // Reemplaza por tu componente real
   { path: 'parte2', component: Home }, // Reemplaza por tu componente real
   { path: 'punto3', component: Home }, // Reemplaza por tu componente real
   
