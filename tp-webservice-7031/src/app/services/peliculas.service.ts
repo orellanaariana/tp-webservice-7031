@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class PeliculasService {
   // ATENCIÓN: Esta es la URL del endpoint real de consumo, revisa tu panel de RapidAPI para confirmar la URL exacta.
-  private apiUrl = 'https://imdb236.p.rapidapi.com/api/imdb/cast/nm0000190/titles'; 
+  private apiUrl = 'https://imdb236.p.rapidapi.com/api/imdb/top250-movies'; // URL para obtener las 250 mejores películas  
 
   // Inyectamos el HttpClient
   constructor(private http: HttpClient) { }

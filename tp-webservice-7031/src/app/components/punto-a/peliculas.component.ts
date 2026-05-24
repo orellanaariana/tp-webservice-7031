@@ -26,6 +26,7 @@ export class PeliculasComponent implements OnInit {
       next: (data) => {
         // Asignamos la respuesta a nuestra variable. 
         // Nota: Dependiendo de cómo devuelva los datos la API, a veces es "data" directo, o "data.movies", etc.
+        console.log('Películas recibidas:', data); // Agrega este log para ver la estructura de los datos
         this.peliculas = data; 
       },
       error: (error) => {

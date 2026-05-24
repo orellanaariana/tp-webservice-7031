@@ -2,16 +2,16 @@
   <h2 class="text-center mb-4">Portal de Películas - Top 100 IMDB</h2>
   
   <div class="row">
-    @for (pelicula of peliculas; track pelicula.title) {
+    @for (pelicula of peliculas; track pelicula.primaryTitle) {
       <div class="col-md-4 mb-4">
         <div class="card h-100 shadow-sm">
-          <img [src]="pelicula.image" class="card-img-top" alt="Portada de {{ pelicula.title }}">
+          <img [src]="pelicula.primaryImage" class="card-img-top" alt="Portada de {{ pelicula.primaryTitle }}">
           
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ pelicula.title }} ({{ pelicula.year }})</h5>
+            <h5 class="card-title">{{ pelicula.primaryTitle }} ({{ pelicula.startYear }})</h5>
             <p class="card-text flex-grow-1">{{ pelicula.description }}</p>
             <div class="mt-auto">
-              <span class="badge bg-primary">{{ pelicula.genre }}</span>
+              <span class="badge bg-primary">{{ pelicula.genres }}</span>
             </div>
           </div>
         </div>
