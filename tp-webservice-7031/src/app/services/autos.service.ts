@@ -6,26 +6,31 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AutosService {
-  // ATENCIÓN: Revisa en RapidAPI si la URL base es exactamente esta
-  private apiUrl = 'https://car-specs.p.rapidapi.com/v2/cars/makes/%7BmakeId%7D/models'; 
+  
+  // 1. LA URL BASE (Corta hasta la palabra cars o v2, dependiendo de la API)
+  // Basándome en tu error, la ruta base correcta parece ser esta:
+  private apiUrl = 'https://car-specs.p.rapidapi.com/v2/cars'; 
   
   private httpOptions = {
     headers: new HttpHeaders({
-      'X-RapidAPI-Key': 'b998040188msh82022c7ccfca6cep15a594jsn6ab3d28e9e75', // Pega tu llave de RapidAPI
-      'X-RapidAPI-Host': 'car-specs.p.rapidapi.com' // Verifica este host en la página de RapidAPI
+      'X-RapidAPI-Key': 'b998040188msh82022c7ccfca6cep15a594jsn6ab3d28e9e75', // ¡Recuerda mantener tu llave aquí!
+      'X-RapidAPI-Host': 'car-specs.p.rapidapi.com'
     })
   };
 
   constructor(private http: HttpClient) { }
 
-  // 1. Obtener todas las marcas
+  // 2. OBTENER TODAS LAS MARCAS
   getMarcas(): Observable<any> {
+    // Al sumarlo con la URL base, la petición irá a: /v2/cars/makes
     return this.http.get<any>(`${this.apiUrl}/makes`, this.httpOptions);
   }
 
-  // 2. Obtener modelos según la marca elegida
-  getModelos(marca: string): Observable<any> {
-    // La URL exacta depende de la documentación de la API, suele ser así:
-    return this.http.get<any>(`${this.apiUrl}/models?make=${marca}`, this.httpOptions);
+  // 3. OBTENER MODELOS DE UNA MARCA
+  // Fíjate cómo reemplazamos el {makeId} por la variable "marca"
+  // 3. OBTENER MODELOS DE UNA MARCA
+  // CORRECCIÓN: La API exige buscar mediante el id (makeId)
+  getModelos(makeId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/makes/${makeId}/models`, this.httpOptions);
   }
 }

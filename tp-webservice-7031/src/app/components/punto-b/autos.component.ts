@@ -30,33 +30,41 @@ export class AutosComponent implements OnInit {
     this.autosService.getMarcas().subscribe({
       next: (data) => {
         console.log('Marcas recibidas:', data);
-        this.marcas = data; // OJO: Si la consola muestra { makes: [...] }, cambia a data.makes
+        
+        // TRUCO SALVAVIDAS: Si los datos vienen dentro de un objeto (ej. data.data o data.makes), 
+        // lo detectamos y extraemos solo el arreglo para que el @for de Angular no colapse.
+        this.marcas = Array.isArray(data) ? data : (data.data || data.makes || data.results || Object.values(data)[0]);
       },
       error: (err) => console.error('Error al cargar marcas', err)
     });
   }
 
   verModelos(marca: any): void {
-    // Extraemos el nombre de la marca (Verifica en consola si se llama 'name', 'make', etc.)
+    // CORRECCIÓN: Extraemos el ID para la API y el Nombre para el título visual
+    const idMarca = marca.id; 
     const nombreMarca = marca.name; 
+
     this.marcaSeleccionada = nombreMarca;
     this.modelosActuales = [];
 
-    // Verificamos si YA buscamos esta marca antes
-    if (this.modelosCache[nombreMarca]) {
-      console.log(`Modelos de ${nombreMarca} cargados desde la CACHÉ (Ahorraste 1 consulta)`);
-      this.modelosActuales = this.modelosCache[nombreMarca];
-      return; // Salimos de la función para no llamar a la API
+    // Buscamos en el caché usando el ID numérico
+    if (this.modelosCache[idMarca]) {
+      console.log(`Modelos de ${nombreMarca} cargados desde la CACHÉ.`);
+      this.modelosActuales = this.modelosCache[idMarca];
+      return; 
     }
 
-    // Si no la tenemos, llamamos a la API
     this.cargandoModelos = true;
-    this.autosService.getModelos(nombreMarca).subscribe({
+    
+    // Llamamos a la API enviándole el ID, no el nombre
+    this.autosService.getModelos(idMarca).subscribe({
       next: (data) => {
-        console.log(`Modelos de ${nombreMarca} recibidos de la API:`, data);
-        this.modelosActuales = data; // OJO: Igual que arriba, verifica el nombre exacto de la propiedad en la consola
-        // Guardamos en nuestro caché para el futuro
-        this.modelosCache[nombreMarca] = this.modelosActuales;
+        console.log(`Modelos de ${nombreMarca} recibidos:`, data);
+        
+        // Mismo truco salvavidas para el arreglo de modelos
+        this.modelosActuales = Array.isArray(data) ? data : (data.data || data.models || data.results || Object.values(data)[0]); 
+        
+        this.modelosCache[idMarca] = this.modelosActuales; // Guardamos en caché
         this.cargandoModelos = false;
       },
       error: (err) => {
