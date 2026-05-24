@@ -1,3 +1,19 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+// 1. Importamos los componentes que van a ser las "Páginas"
+import { Home } from './components/layout/home/home.component'; 
+import { PeliculasComponent } from './components/punto-a/peliculas.component';
+// Importa aquí los demás (Conversor, TextToSpeech, etc.)
+
+export const routes: Routes = [
+  // 2. Definimos qué ruta en la URL carga qué componente
+  { path: 'home', component: Home },
+  { path: 'app-peliculas', component: PeliculasComponent },
+  { path: 'punto2', component: Home }, // Reemplaza por tu componente real
+  { path: 'parte2', component: Home }, // Reemplaza por tu componente real
+  { path: 'punto3', component: Home }, // Reemplaza por tu componente real
+  
+  // 3. Rutas por defecto y comodines (¡Muy recomendado!)
+  { path: '', redirectTo: 'home', pathMatch: 'full' }, // Si la ruta está vacía, va a 'home'
+  { path: '**', redirectTo: 'home' } // Si el usuario escribe una URL que no existe, vuelve a 'home'
+];
