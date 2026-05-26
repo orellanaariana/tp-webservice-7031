@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AutosService } from '../../services/autos.service'; // Ajusta tu ruta
 
 @Component({
-  selector: 'app-autos',
+  selector:'app-autos',
   standalone: true,
-  imports: [], // Si usas algo extra, ponlo aquí
+  imports: [],
   templateUrl: './autos.component.html',
   styleUrls: ['./autos.component.css']
 })
@@ -17,7 +17,7 @@ export class AutosComponent implements OnInit {
   modelosActuales: any[] = [];
   cargandoModelos: boolean = false;
 
-  // Nuestro "Diccionario" para no gastar consultas de más
+  //"Diccionario" para no gastar consultas de más
   modelosCache: { [key: string]: any[] } = {};
 
   constructor(private autosService: AutosService) {}
