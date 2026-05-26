@@ -1,0 +1,87 @@
+<div class="container mt-5">
+  
+  @if (!estaLogueado) {
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card shadow rounded-4 p-4">
+          <h3 class="text-center fw-bold mb-4">🔐 Acceso Privado</h3>
+          <p class="text-muted text-center small mb-4">Usa usuario: <code>admin</code> y clave: <code>1234</code></p>
+          
+          @if (errorLogin) {
+            <div class="alert alert-danger text-center p-2">Credenciales incorrectas</div>
+          }
+
+          <div class="mb-3">
+            <label class="form-label">Usuario</label>
+            <input type="text" class="form-control" [(ngModel)]="usuario">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" [(ngModel)]="contrasenia">
+          </div>
+          <button class="btn btn-dark w-100 fw-bold" (click)="procesarLogin()">Ingresar</button>
+        </div>
+      </div>
+    </div>
+  } 
+  
+  @else {
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+      <h2>🛠️ Panel de Administración (CRUD)</h2>
+      <button class="btn btn-outline-danger fw-bold btn-sm" (click)="procesarLogout()">Cerrar Sesión</button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm rounded-4 bg-light border-0">
+          <h5 class="fw-bold mb-3">{{ notaEnEdicion ? '✏️ Editar Nota' : '➕ Nueva Nota' }}</h5>
+          
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-secondary">Título</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevaNota.title" placeholder="Ej. Recordar revisar API">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-secondary">Contenido</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="nuevaNota.body" placeholder="Escribe aquí..."></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-success w-100 fw-bold" (click)="guardarNota()">
+              {{ notaEnEdicion ? 'Actualizar' : 'Crear Nota' }}
+            </button>
+            @if (notaEnEdicion) {
+              <button class="btn btn-secondary" (click)="cancelarEdicion()">X</button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <h5 class="fw-bold mb-3">📋 Registros en el Servidor REST</h5>
+        
+        <div class="row g-3">
+          @for (nota of listaNotas; track nota.id) {
+            <div class="col-12">
+              <div class="card p-3 shadow-sm border border-light rounded-3 d-flex flex-row justify-content-between align-items-center">
+                <div style="max-width: 75%;">
+                  <h6 class="fw-bold text-dark mb-1 text-capitalize">{{ nota.title }}</h6>
+                  <p class="small text-muted mb-0 text-truncate">{{ nota.body }}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="seleccionarParaEditar(nota)">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarNota(nota.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

@@ -6,7 +6,10 @@ import { PeliculasComponent } from './components/punto-a/peliculas.component';
 import { AutosComponent } from './components/punto-b/autos.component'; // Reemplaza por tu componente real
 import { ConversorComponent } from './components/punto-c/conversor.component'; // Reemplaza por tu componente real
 import { TtsComponent } from './components/punto-d/tts.component'; 
-import { ClimaComponent } from './components/punto-e/clima.component'; // Reemplaza por tu componente real
+import { ClimaComponent } from './components/punto-e/clima.component';
+import { AdminComponent } from './components/admin/admin';
+import { authGuard } from './components/auth/auth.guard'; // Importa tu guardia de autenticación
+// Reemplaza por tu componente real
 // Importa aquí los demás (Conversor, TextToSpeech, etc.)
 
 export const routes: Routes = [
@@ -17,7 +20,9 @@ export const routes: Routes = [
   { path: 'app-conversor', component: ConversorComponent }, // Reemplaza por tu componente real
   { path: 'app-tts', component: TtsComponent }, 
   { path: 'app-clima', component: ClimaComponent },
-    // Reemplaza por tu componente real
+  { path: 'app-admin', component: AdminComponent, canActivate: [authGuard] },
+  { path: 'login', component: AdminComponent }, // Ruta para el login (puede ser la misma que admin o una diferente, según tu diseño)
+  // Reemplaza por tu componente real
   // Agrega aquí las rutas para tus otros componentes (Autos, Conversor, TextToSpeech, etc.)
   // 3. Rutas por defecto y comodines (¡Muy recomendado!)
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Si la ruta está vacía, va a 'home'
