@@ -14,7 +14,7 @@
               type="text" 
               class="form-control form-control-lg" 
               [(ngModel)]="ciudadBuscada" 
-              placeholder="Ej. Jujuy, Madrid, Tokyo..."
+              placeholder="Ej. Madrid, Tokyo..."
               (keyup.enter)="buscarClima()"> <button class="btn btn-info px-4 fw-bold" (click)="buscarClima()" [disabled]="cargando || !ciudadBuscada">
               @if (cargando) {
                 <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
