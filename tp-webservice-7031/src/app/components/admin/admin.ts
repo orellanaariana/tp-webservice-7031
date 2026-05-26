@@ -7,14 +7,11 @@ import { CrudService, Nota } from '../../services/crud.service';
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [FormsModule], // <-- ¡NO OLVIDES ESTA LÍNEA!
-  templateUrl: './admin.html', // Verifica que este nombre coincida con tu HTML
+  imports: [FormsModule],
+  templateUrl: './admin.html',
   styleUrls: ['./admin.css']
 })
 export class AdminComponent implements OnInit { 
-  // (Nota: Si tu error decía "type 'Admin'", Angular asume que tu clase se llama AdminComponent. 
-  // Mantén AdminComponent aquí para que funcione correctamente).
-
   // --- 1. VARIABLES ---
   usuario: string = '';
   contrasenia: string = '';

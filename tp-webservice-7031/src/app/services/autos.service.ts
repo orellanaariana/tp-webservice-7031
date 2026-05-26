@@ -27,8 +27,6 @@ export class AutosService {
   }
 
   // 3. OBTENER MODELOS DE UNA MARCA
-  // Fíjate cómo reemplazamos el {makeId} por la variable "marca"
-  // 3. OBTENER MODELOS DE UNA MARCA
   // CORRECCIÓN: La API exige buscar mediante el id (makeId)
   getModelos(makeId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/makes/${makeId}/models`, this.httpOptions);
