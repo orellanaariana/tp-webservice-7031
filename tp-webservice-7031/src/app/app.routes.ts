@@ -9,6 +9,7 @@ import { TtsComponent } from './components/punto-d/tts.component';
 import { ClimaComponent } from './components/punto-e/clima.component';
 import { AdminComponent } from './components/admin/admin';
 import { authGuard } from './components/auth/auth.guard'; // Importa tu guardia de autenticación
+import { F1Component } from './components/punto-f/f1.component';
 // Reemplaza por tu componente real
 // Importa aquí los demás (Conversor, TextToSpeech, etc.)
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'app-tts', component: TtsComponent }, 
   { path: 'app-clima', component: ClimaComponent },
   { path: 'app-admin', component: AdminComponent, canActivate: [authGuard] },
+  { path: 'app-f1', component: F1Component }, // Ruta para el componente de F1
   { path: 'login', component: AdminComponent }, // Ruta para el login (puede ser la misma que admin o una diferente, según tu diseño)
   // Reemplaza por tu componente real
   // Agrega aquí las rutas para tus otros componentes (Autos, Conversor, TextToSpeech, etc.)

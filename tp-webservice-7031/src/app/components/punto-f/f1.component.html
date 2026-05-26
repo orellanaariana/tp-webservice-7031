@@ -1,0 +1,107 @@
+<div class="container mt-5">
+  <div class="card shadow-sm border-0 mb-4 bg-light">
+    <div class="card-body">
+      <h3 class="fw-bold text-danger mb-4">🏁 Buscador Fórmula 1</h3>
+      
+      <div class="row align-items-end">
+        <div class="col-md-4 mb-3">
+          <label class="form-label fw-bold">Año (Ej. 2024)</label>
+          <input type="number" class="form-control" [(ngModel)]="anioBuscado">
+        </div>
+        <div class="col-md-8 mb-3 d-flex gap-2">
+          <button class="btn btn-danger fw-bold" (click)="consultarCarreras()">
+            Consultar Carreras
+          </button>
+          
+          <button class="btn btn-dark fw-bold" (click)="consultarConstructores()">
+            Clasificación Constructores
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (constructoresFiltrados.length > 0) {
+    <div class="alert alert-dark shadow-sm mb-4">
+      <h5 class="fw-bold mb-3">🏆 Constructores Destacados ({{ anioBuscado }})</h5>
+      <div class="d-flex justify-content-between">
+        <div>
+          <span class="badge bg-success fs-6 me-2">1° Puesto</span> 
+          <strong>{{ constructoresFiltrados[0].teamName }}</strong> - {{ constructoresFiltrados[0].points }} pts
+        </div>
+        <div>
+          <span class="badge bg-danger fs-6 me-2">Último Puesto</span> 
+          <strong>{{ constructoresFiltrados[1].teamName }}</strong> - {{ constructoresFiltrados[1].points }} pts
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (carreras.length > 0) {
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-bordered table-hover bg-white mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Race id </th>
+            <th>Carrera (race) </th>
+            <th>Sesiones(season) </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (carrera of carreras; track carrera.id) {
+            <tr>
+              <td class="fw-bold text-center align-middle">{{ carrera.id }}</td>
+              <td class="align-middle">{{ carrera.name }}</td>
+              <td>
+                @for (sesion of carrera.sessions; track sesion.id) {
+                  <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2">
+                    <span>ID: {{ sesion.id }} - {{ sesion.name }}</span>
+                    <button class="btn btn-sm btn-outline-danger" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#posicionesModal"
+                            (click)="verPosiciones(sesion.id, sesion.name)">
+                      VER POSICIONES 
+                    </button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<div class="modal fade" id="posicionesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title fw-bold">Posiciones - {{ nombreSesionActual }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        
+        @if (cargandoPilotos) {
+          <div class="text-center py-4">
+            <div class="spinner-border text-danger" role="status"></div>
+          </div>
+        }
+
+        @if (!cargandoPilotos && pilotosSesion.length > 0) {
+          <div class="list-group">
+            @for (piloto of pilotosSesion; track piloto.driverId) {
+              <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                  <span class="badge bg-secondary me-3">Pos {{ piloto.position }}</span>
+                  <strong>{{ piloto.driverName }}</strong> ({{ piloto.team }})
+                </span>
+                <span class="text-muted">{{ piloto.time }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
