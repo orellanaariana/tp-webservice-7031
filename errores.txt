@@ -1,0 +1,35 @@
+
+### 1. Errores de Angular (El Frontend)
+❌ Error: `Can't bind to 'ngModel'` o `Property does not exist`
+* **Por qué aparece:** Angular es muy estricto. Si no le avisas que vas a usar formularios, no reconoce `ngModel`. Si el HTML busca una variable que no guardaste en el TypeScript, lanza error.
+* **Cómo solucionarlo:** 1. En componentes *Standalone*, siempre debes importar `FormsModule` (`imports: [FormsModule]`).
+2. Guarda siempre ambos archivos (`.ts` y `.html`) a la vez (Ctrl + S o Archivo > Guardar Todo).
+* **Para evitar complicaciones:** Al crear un componente que tenga inputs, tu primer reflejo debe ser ir al `.ts` e importar `FormsModule` antes de siquiera tocar el HTML.
+
+#### ❌ Error: Ver `[object Object]` en pantalla en lugar de los datos
+
+* **Por qué aparece:** Estás intentando imprimir (con `{{ }}`) un objeto JSON complejo completo, en lugar de apuntar a una propiedad específica de tipo texto (como el nombre).
+* **Cómo solucionarlo:** Cambia `{{ ingrediente }}` por `{{ ingrediente.nombre }}` (o la propiedad correcta).
+* **Para evitar complicaciones:** Usa el truco del **Pipe JSON** mientras programas. Pon `{{ variable | json }}` en tu HTML temporalmente para ver la estructura real de los datos y saber exactamente qué nombre de propiedad debes usar.
+
+### 2. Errores HTTP y de APIs (El Backend)
+#### ❌ Error 404 (Not Found)
+* **Por qué aparece:** Le estás pidiendo al servidor una dirección que no existe, o estás buscando un dato específico que no está en la base de datos (ej. buscar el año 2025 cuando solo llega al 2024). También ocurre si confundes la URL base y envías parámetros extra en la ruta (ej. `/recipes/search` en lugar de `/recipes`).
+* **Cómo solucionarlo:** Revisa la documentación de la API en RapidAPI. Modifica tu servicio para que la URL coincida letra por letra (ojo con los plurales como `standings` vs `standing`) y asegúrate de enviar los parámetros correctos.
+* **Para evitar complicaciones:** Antes de escribir código, prueba el endpoint en el panel web de RapidAPI (haciendo clic en "Test Endpoint") y fíjate qué URL genera exactamente.
+
+#### ❌ Error 403 (Forbidden)
+* **Por qué aparece:** El servidor reconoce que existes, pero no te deja pasar. En plataformas como RapidAPI casi siempre significa que **no te has suscrito al plan gratuito** de esa API específica, o que tu API Key tiene un espacio en blanco accidental o el Host no coincide.
+* **Cómo solucionarlo:** Ve a la pestaña "Pricing" de la API y haz clic en "Subscribe" (Plan Basic/Free). Revisa que los headers `X-RapidAPI-Key` y `X-RapidAPI-Host` en tu servicio estén perfectos.
+* **Para evitar complicaciones:** Nunca asumas que una API es pública de inmediato. El primer paso al abrir una nueva API en RapidAPI es suscribirse al plan gratuito.
+
+#### ❌ Error 502 (Bad Gateway)
+* **Por qué aparece:** El servidor externo (el dueño de la API, no RapidAPI) está caído o saturado. **No es tu culpa ni de tu código.**
+* **Cómo solucionarlo:** Usa la "Estrategia de Simulacro". Comenta la petición HTTP en tu servicio, importa `of` desde la librería `rxjs`, e inyecta un array JSON escrito a mano para simular que los datos llegaron correctamente.
+* **Para evitar complicaciones:** Si ves un error de la familia de los 500 (500, 502, 503, 504), no pierdas tiempo buscando fallos en Angular. Prepara tu plan de contingencia (`of`) para que tu interfaz no se rompa durante el examen.
+
+### 💡 Regla de oro para el examen
+Si un botón no hace nada o la tabla no se llena, **tu primer paso siempre debe ser presionar F12 y mirar la Consola y Red en el navegador.
+
+* Si no hay error rojo: El problema es de Angular (posiblemente un error en el HTML, como olvidarse un `click=""` o un error tipográfico en un bucle `@for`).
+* Si hay un error con número (400, 403, 404, 500): El problema está en tu archivo `.service.ts`.
