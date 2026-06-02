@@ -12,8 +12,9 @@ import { authGuard } from './components/auth/auth.guard'; // Importa tu guardia 
 import { F1Component } from './components/punto-f/f1.component';
 import { RecetasComponent } from './components/evaluacion/recetas.component';
 import { IpComponent } from './components/ip/ip.component'; 
-// Reemplaza por tu componente real
-// Importa aquí los demás (Conversor, TextToSpeech, etc.)
+import { YoutubeComponent } from './components/youtube/youtube.component';
+import { AmazonComponent } from './components/amazon/amazon.component';
+import { LugaresComponent } from './components/lugares/lugares.component'; // Importa tu componente de Lugares
 
 export const routes: Routes = [
   // 2. Definimos qué ruta en la URL carga qué componente
@@ -28,9 +29,11 @@ export const routes: Routes = [
   { path: 'login', component: AdminComponent },
   { path: 'app-recetas', component: RecetasComponent }, 
   { path: 'app-ip', component: IpComponent },
-
-  // Agrega aquí las rutas para tus otros componentes (Autos, Conversor, TextToSpeech, etc.)
-  // 3. Rutas por defecto y comodines (¡Muy recomendado!)
+  { path: 'app-youtube', component: YoutubeComponent },
+  { path: 'app-amazon', component: AmazonComponent }, 
+  { path: 'app-lugares', component: LugaresComponent },
+ 
+  // 3. Rutas por defecto y comodines 
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Si la ruta está vacía, va a 'home'
   { path: '**', redirectTo: 'home' } // Si el usuario escribe una URL que no existe, vuelve a 'home'
 ];

@@ -1,0 +1,106 @@
+<div class="container mt-5">
+  
+  <div class="card shadow-sm p-4 bg-light border-0 mb-4 rounded-4">
+    <h3 class="fw-bold text-primary mb-3">📍 Buscador de Negocios Locales</h3>
+    <div class="input-group input-group-lg">
+      <input type="text" 
+             class="form-control" 
+             [(ngModel)]="textoBusqueda" 
+             (keyup.enter)="buscar()" 
+             placeholder="Ej. hoteles en jujuy">
+      <button class="btn btn-primary fw-bold px-4" (click)="buscar()">
+        BUSCAR
+      </button>
+    </div>
+  </div>
+
+  @if (cargandoLugares) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted mt-2">Buscando negocios en la región...</p>
+    </div>
+  }
+
+  @if (lugares.length > 0) {
+    <div class="card shadow-sm border-0 mb-5">
+      <div class="card-header bg-dark text-white py-3">
+        <h5 class="mb-0 fw-bold">LISTADO DE LUGARES ENCONTRADOS</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-secondary">
+            <tr>
+              <th>Nombre</th>
+              <th>Dueño / Tipo</th>
+              <th>Latitud – longitud</th>
+              <th class="text-center">Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (lugar of lugares; track lugar.business_id) {
+              <tr>
+                <td class="fw-bold">{{ lugar.name || lugar.title }}</td>
+                <td class="text-muted">{{ lugar.owner_name || lugar.type || 'Desconocido' }}</td>
+                <td>
+                  <span class="badge bg-light text-dark border">
+                    {{ lugar.latitude }} - {{ lugar.longitude }}
+                  </span>
+                  <button class="btn btn-sm btn-link text-success p-0 ms-2" 
+                          (click)="abrirEnMapa(lugar.latitude, lugar.longitude)"
+                          title="Ver en mapa">
+                    <i class="fa-solid fa-map-location-dot"></i> Ver
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-outline-primary btn-sm fw-bold" 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#fotosModal"
+                          (click)="verDetalle(lugar)">
+                    MAS INFO
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+</div>
+
+<div class="modal fade" id="fotosModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold">📸 Galería: {{ lugarSeleccionado?.name }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body bg-light">
+        
+        @if (cargandoFotos) {
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Cargando fotos del negocio...</p>
+          </div>
+        }
+
+        @if (!cargandoFotos) {
+          @if (fotosLugar.length > 0) {
+            <div class="row g-3">
+              @for (foto of fotosLugar; track foto.photo_id) {
+                <div class="col-6 col-md-4">
+                  <img [src]="foto.photo_url || foto" class="img-fluid rounded shadow-sm w-100 object-fit-cover" style="height: 150px;" alt="Foto del lugar">
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="alert alert-warning text-center m-0">
+              Este negocio no tiene imágenes cargadas (photo_sample vacío).
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>

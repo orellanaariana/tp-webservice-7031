@@ -1,0 +1,111 @@
+<div class="container mt-5">
+  
+  <div class="card shadow-sm p-4 bg-light mb-4 border-0 rounded-4">
+    <h3 class="fw-bold text-warning text-dark mb-3">🛒 Buscador Amazon ES</h3>
+    <div class="row g-2 align-items-center">
+      <div class="col-12 col-md-9">
+        <input type="text" 
+               class="form-control form-control-lg" 
+               [(ngModel)]="textoBusqueda" 
+               (keyup.enter)="buscar()" 
+               placeholder="Buscar productos (ej. laptop, zapatillas...)">
+      </div>
+      <div class="col-12 col-md-3">
+        <button class="btn btn-dark btn-lg w-100 fw-bold" (click)="buscar()">
+          🔍 BUSCAR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (cargandoProductos) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-warning" role="status"></div>
+      <p class="text-muted mt-2 fw-semibold">Consultando catálogo de Amazon...</p>
+    </div>
+  }
+
+  @if (productos.length > 0) {
+    <h5 class="fw-bold mb-3 border-bottom pb-2">PRODUCTOS ENCONTRADOS</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+      @for (producto of productos; track producto.asin) {
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0 rounded-3">
+            
+            <img [src]="producto.image || producto.thumbnail" 
+                 class="card-img-top p-3 object-fit-contain" 
+                 style="height: 200px;" 
+                 alt="Imagen del producto">
+            
+            <div class="card-body bg-light border-top d-flex flex-column">
+              <h5 class="card-title text-center mb-3">
+                <button class="btn btn-warning fw-bold w-100" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#reviewsModal"
+                        (click)="verDetalle(producto.asin)">
+                  ASIN: {{ producto.asin }}
+                </button>
+              </h5>
+              
+              <p class="card-text small text-secondary flex-grow-1 text-truncate-3">
+                {{ producto.title }}
+              </p>
+              
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                <span class="fs-5 fw-bold text-success">{{ producto.price || 'Consultar' }}</span>
+                <span class="badge bg-secondary">⭐ {{ producto.rating || 'N/A' }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+<div class="modal fade" id="reviewsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold">Detalle del Producto - ASIN: {{ asinSeleccionado }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body bg-light">
+        
+        @if (cargandoResenas) {
+          <div class="text-center py-5">
+            <div class="spinner-border text-dark" role="status"></div>
+            <p class="text-muted mt-2">Cargando reseñas de clientes...</p>
+          </div>
+        }
+
+        @if (!cargandoResenas && resenasData) {
+          <div class="container-fluid">
+            <div class="alert alert-info">
+              <strong>Métrica Global:</strong> El producto tiene un promedio general de {{ resenasData.rating || 'N/A' }} estrellas.
+            </div>
+            
+            <h6 class="fw-bold mb-3 border-bottom pb-2">Últimas reseñas:</h6>
+            <div class="list-group">
+              @for (review of (resenasData.reviews || resenasData.data?.reviews || []); track review.id) {
+                <div class="list-group-item border-0 shadow-sm mb-2 rounded-3">
+                  <div class="d-flex justify-content-between w-100">
+                    <h6 class="mb-1 fw-bold">{{ review.title || 'Sin título' }}</h6>
+                    <small class="text-warning fw-bold">⭐ {{ review.rating }}</small>
+                  </div>
+                  <p class="mb-1 small text-secondary">{{ review.body || review.reviewText }}</p>
+                  <small class="text-muted">Por: {{ review.profileName || review.author }}</small>
+                </div>
+              } @empty {
+                <p class="text-center text-muted my-3">No se encontraron reseñas para este producto.</p>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>
