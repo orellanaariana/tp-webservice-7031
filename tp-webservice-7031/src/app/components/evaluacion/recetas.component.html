@@ -1,0 +1,109 @@
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 rounded-4 bg-light mb-4">
+    <h2 class="fw-bold text-success mb-3">🍳 Buscador de Recetas Low-Carb</h2>
+    
+    <div class="input-group mb-3">
+      <input type="text" 
+             class="form-control form-control-lg" 
+             placeholder="Ej. pizza, chicken, salad..." 
+             [(ngModel)]="textoBusqueda"
+             (keyup.enter)="buscar()">
+      <button class="btn btn-success fw-bold px-4" type="button" (click)="buscar()">
+        BUSCAR
+      </button>
+    </div>
+  </div>
+
+  @if (cargandoRecetas) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-success" role="status"></div>
+    </div>
+  }
+
+  @if (listaRecetas.length > 0) {
+    <div class="row g-4">
+      @for (receta of listaRecetas; track receta.id) {
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm rounded-4 overflow-hidden border-0 bg-white">
+            
+            <img [src]="receta.image || 'https://placehold.co/600x400?text=No+Image'" 
+                 class="card-img-top object-fit-cover" 
+                 style="height: 200px;" 
+                 [alt]="receta.name">
+            
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title fw-bold text-dark text-capitalize">{{ receta.name }}</h5>
+              
+              <p class="card-text text-muted small flex-grow-1 text-truncate-3">
+                {{ receta.description || 'Sin descripción disponible.' }}
+              </p>
+              
+              <div class="mb-3">
+                <h6 class="fw-bold text-secondary small mb-1">Ingredientes:</h6>
+                <ul class="ps-3 mb-0 small text-secondary" style="max-height: 100px; overflow-y: auto;">
+                  @for (ing of (receta.ingredients || receta.ingredientList); track ing) {
+                    <li>{{ ing }}</li>
+                  } @empty {
+                    <li>Ver detalles en la preparación</li>
+                  }
+                </ul>
+              </div>
+
+              <div class="d-flex gap-2 mt-auto">
+                <button class="btn btn-outline-primary btn-sm w-100 fw-bold" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#traduccionModal"
+                        (click)="abrirYTraducir(receta)">
+                  🌐 TRADUCIR
+                </button>
+                <button class="btn btn-light btn-sm w-100 text-secondary fw-bold">
+                  DETALLE
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!cargandoRecetas && textoBusqueda) {
+    <div class="alert alert-warning text-center rounded-3">
+      No se encontraron recetas con el término "{{ textoBusqueda }}".
+    </div>
+  }
+</div>
+
+<div class="modal fade" id="traduccionModal" tabindex="-1" aria-labelledby="traduccionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <div class="modal-header bg-primary text-white border-0 py-3">
+        <h5 class="modal-title fw-bold" id="traduccionModalLabel">
+          🗣️ Descripción Traducida (ES)
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-4">
+        
+        @if (cargandoTraduccion) {
+          <div class="text-center py-3">
+            <div class="spinner-border text-primary mb-2" role="status"></div>
+            <p class="text-muted small mb-0">Traduciendo descripción de la receta...</p>
+          </div>
+        }
+
+        @if (!cargandoTraduccion) {
+          <h6 class="fw-bold text-dark text-capitalize mb-2">{{ recetaSeleccionada?.name }}</h6>
+          <p class="text-secondary lh-lg mb-0">
+            {{ descripcionTraducida }}
+          </p>
+        }
+
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-secondary fw-bold px-4 btn-sm" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
