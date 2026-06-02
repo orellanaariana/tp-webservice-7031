@@ -1,0 +1,95 @@
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 rounded-3 bg-light mb-4">
+    <h4 class="fw-bold text-primary mb-3">🌐 Localizador de Direcciones IP</h4>
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-8">
+        <label class="form-label fw-semibold">Ingrese Dirección IP (v4 o v6):</label>
+        <input type="text" class="form-control form-control-lg" [(ngModel)]="ipInput" placeholder="Ej. 190.52.39.244">
+      </div>
+      <div class="col-12 col-md-4">
+        <button class="btn btn-primary btn-lg w-100 fw-bold" (click)="buscarInfoIp()">
+          BUSCAR IP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (cargandoIp) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  }
+
+  @if (resultadoIp) {
+    <div class="card shadow-sm rounded-3 border-primary mx-auto" style="max-width: 600px;">
+      <div class="card-header bg-primary text-white py-3">
+        <h5 class="card-title mb-0 fw-bold text-center">RESULTADOS ENCONTRADOS</h5>
+      </div>
+      <div class="card-body">
+        
+        <h6 class="text-uppercase fw-bold text-secondary border-bottom pb-1 mb-3">
+          INFORMACION DE LA IP
+        </h6>
+        <div class="row mb-4">
+          <div class="col-6">
+            <span class="text-muted d-block small">PAIS</span>
+            <strong class="text-dark fs-5">{{ resultadoIp.country || 'No detectado' }}</strong>
+          </div>
+          <div class="col-6">
+            <span class="text-muted d-block small">CIUDAD</span>
+            <strong class="text-dark fs-5">{{ resultadoIp.city || 'No detectada' }}</strong>
+          </div>
+        </div>
+
+        <h6 class="text-uppercase fw-bold text-secondary border-bottom pb-1 mb-3">
+          INFORMACIÓN DE LA UBICACIÓN DE LA IP
+        </h6>
+        <div class="row g-3 mb-4">
+          <div class="col-4">
+            <span class="text-muted d-block small">FECHA DEL LUGAR</span>
+            <span class="fw-semibold text-dark">{{ getFechaLugar() }}</span>
+          </div>
+          <div class="col-4">
+            <span class="text-muted d-block small">HORA DEL LUGAR</span>
+            <span class="fw-semibold text-dark">{{ getHoraLugar() }}</span>
+          </div>
+          <div class="col-4">
+            <span class="text-muted d-block small">ZONA HORARIA</span>
+            <span class="fw-semibold text-dark">{{ resultadoIp.timezone || 'N/A' }}</span>
+          </div>
+        </div>
+
+        <div class="bg-light p-3 rounded-3 d-flex justify-content-between align-items-center">
+          <span class="fw-bold text-dark m-0">IR AL LUGAR:</span>
+          <a [href]="getGoogleMapsLink()" target="_blank" class="btn btn-sm btn-danger fw-bold px-3">
+            📍 ABRIR LINK MAPA
+          </a>
+        </div>
+
+        <div class="mt-4 border-top pt-3">
+          <button class="btn btn-outline-success btn-sm w-100 fw-bold mb-3" 
+                  (click)="obtenerDireccionExacta()" 
+                  [disabled]="cargandoDireccion">
+            🔍 OBTENER DIRECCIÓN POSTAL (CALLE, NRO, PCIA)
+          </button>
+
+          @if (cargandoDireccion) {
+            <div class="text-center py-2">
+              <div class="spinner-border spinner-border-sm text-success" role="status"></div>
+            </div>
+          }
+
+          @if (direccionResultante) {
+            <div class="alert alert-success m-0 small">
+              <strong>Dirección postal obtenida:</strong><br>
+              • Calle/Nro: {{ direccionResultante.road || direccionResultante.street || 'N/A' }} {{ direccionResultante.house_number || '' }}<br>
+              • Ciudad: {{ direccionResultante.city || direccionResultante.town || 'N/A' }}<br>
+              • Provincia/Estado: {{ direccionResultante.state || direccionResultante.province || 'N/A' }}
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  }
+</div>
